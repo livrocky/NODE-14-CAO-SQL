@@ -7,7 +7,7 @@ const dbConfig = {
   host: 'localhost',
   user: 'root',
   password: 'root',
-  database: 'type8_first_db',
+  database: 'second_db',
   port: '8889',
 };
 
