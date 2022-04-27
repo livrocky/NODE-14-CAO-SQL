@@ -17,7 +17,7 @@ app.get('/', (req, res) => res.json('yellou'));
 app.use('/api', shirtsRoutes);
 
 app.use('*', (req, res) => {
-  res.status(404).json({ err: 'route not found' });
+  res.status(404).json({ err: 'Tokio puslapio nera' });
 });
 
 app.listen(PORT, () => console.log('express is online', PORT));

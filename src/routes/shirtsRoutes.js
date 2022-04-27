@@ -14,7 +14,7 @@ shirtsRoutes.get('/shirts', async (req, res) => {
     connection = await mysql.createConnection(dbConfig);
     console.log('connected');
     // 2 atlikti veiksma
-    const sql = 'SELECT * FROM `shirts` ORDER BY price ASC LIMIT 2';
+    const sql = 'SELECT * FROM `shirts` ORDER BY price ASC LIMIT 5';
     const [rows, fields] = await connection.query(sql);
     res.json(rows);
   } catch (error) {
@@ -29,3 +29,48 @@ shirtsRoutes.get('/shirts', async (req, res) => {
 });
 
 // POST "/shirts" - įrašo vienus marškinius. //
+
+shirtsRoutes.post('/shirts', async (req, res) => {
+  let connection;
+  try {
+    // 1 prisijungti
+    connection = await mysql.createConnection(dbConfig);
+    console.log('connected');
+    // 2 atlikti veiksma
+    const sql = 'SELECT * FROM `shirts` ORDER BY price ASC LIMIT 2';
+    const [rows, fields] = await connection.query(sql);
+    res.json(rows);
+  } catch (error) {
+    // // err gaudom klaidas
+    console.log('home route error ===', error);
+    res.status(500).json('something went wrong');
+  } finally {
+    // 3 atsijungti
+    if (connection) connection.end();
+    // connection?.close();
+  }
+});
+
+//Pakoreguojame GET "/shirts", kad leistų pagal dydį filtruoti ("/shirts/:size") ir grąžintų 10 pigiausių to dydžio'o. Tačiau jei dydis neparašytas - grąžintų, kaip ir anksčiau, visų dydžių 10 pigiausių.
+
+shirtsRoutes.get('/shirts/:size', async (req, res) => {
+  let connection;
+  try {
+    const { size } = req.params;
+    console.log('size===', size);
+    connection = await mysql.createConnection(dbConfig);
+    // 2 atlikti veiksma
+
+    const sql = 'SELECT * FROM shirts WHERE size = ? ORDER BY price ASC';
+    const [rows] = await connection.query(sql, [size]);
+    res.json(rows);
+  } catch (error) {
+    // // err gaudom klaidas
+    console.log('home route error ===', error);
+    res.status(500).json('something went wrong');
+  } finally {
+    // 3 atsijungti
+    if (connection) connection.end();
+    // connection?.close();
+  }
+});
