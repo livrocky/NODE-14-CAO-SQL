@@ -33,21 +33,17 @@ shirtsRoutes.get('/shirts', async (req, res) => {
 shirtsRoutes.post('/shirts', async (req, res) => {
   let connection;
   try {
-    // 1 prisijungti
-    connection = await mysql.createConnection(dbConfig);
+    const { brand, model, size, price } = req.body;
+    const connection = await mysql.createConnection(dbConfig);
+    const sql = `INSERT INFO shirts (brand, model, size, price) VALUES (?, ?, ?, ?)`;
+    const [rows] = await connection.execute(sql, [brand, model, size, price]);
     console.log('connected');
-    // 2 atlikti veiksma
-    const sql = 'SELECT * FROM `shirts` ORDER BY price ASC LIMIT 2';
-    const [rows, fields] = await connection.query(sql);
     res.json(rows);
   } catch (error) {
     // // err gaudom klaidas
-    console.log('home route error ===', error);
-    res.status(500).json('something went wrong');
+    res.status(500).json('error in post shirts');
   } finally {
-    // 3 atsijungti
-    if (connection) connection.end();
-    // connection?.close();
+    await connection?.end();
   }
 });
 
