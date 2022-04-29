@@ -35,7 +35,7 @@ shirtsRoutes.post('/shirts', async (req, res) => {
   try {
     const { brand, model, size, price } = req.body;
     const connection = await mysql.createConnection(dbConfig);
-    const sql = `INSERT INFO shirts (brand, model, size, price) VALUES (?, ?, ?, ?)`;
+    const sql = `INSERT INTO shirts (brand, model, size, price) VALUES (?, ?, ?, ?)`;
     const [rows] = await connection.execute(sql, [brand, model, size, price]);
     console.log('connected');
     res.json(rows);
